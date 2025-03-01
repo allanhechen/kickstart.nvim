@@ -1,3 +1,8 @@
+-- My own keymaps
+vim.api.nvim_set_keymap('i', '<A-BS>', '<C-W>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('i', '<A-h>', '<S-left>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('i', '<A-l>', '<S-right>', { noremap = true, silent = true })
+
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -143,7 +148,12 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
-
+  {
+    'petertriho/nvim-scrollbar',
+    config = function()
+      require('scrollbar').setup()
+    end,
+  },
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
   -- keys can be used to configure plugin behavior/loading/etc.
@@ -177,6 +187,10 @@ require('lazy').setup({
         changedelete = { text = '~' },
       },
     },
+    config = function()
+      require('gitsigns').setup()
+      require('scrollbar.handlers.gitsigns').setup()
+    end,
   },
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
@@ -898,7 +912,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
+  require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
