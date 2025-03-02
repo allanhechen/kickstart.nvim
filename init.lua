@@ -3,6 +3,11 @@ vim.api.nvim_set_keymap('i', '<A-BS>', '<C-W>', { noremap = true, silent = true 
 vim.api.nvim_set_keymap('i', '<A-h>', '<S-left>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('i', '<A-l>', '<S-right>', { noremap = true, silent = true })
 
+vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Scroll down and center cursor' })
+vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Scroll up and center cursor' })
+vim.keymap.set('n', 'n', 'nzzzv', { desc = 'Next search result and center' })
+vim.keymap.set('n', 'N', 'Nzzzv', { desc = 'Previous search result and center' })
+
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -154,6 +159,13 @@ require('lazy').setup({
       require('scrollbar').setup()
     end,
   },
+  {
+    'ThePrimeagen/vim-be-good',
+    cmd = 'VimBeGood',
+  },
+  {
+    'tpope/vim-fugitive',
+  },
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
   -- keys can be used to configure plugin behavior/loading/etc.
@@ -190,6 +202,7 @@ require('lazy').setup({
     config = function()
       require('gitsigns').setup()
       require('scrollbar.handlers.gitsigns').setup()
+      vim.keymap.set('n', '<leader>gp', ':Gitsigns preview_hunk<CR>')
     end,
   },
 
