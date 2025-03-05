@@ -1,13 +1,3 @@
--- My own keymaps
-vim.api.nvim_set_keymap('i', '<A-BS>', '<C-W>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('i', '<A-h>', '<S-left>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('i', '<A-l>', '<S-right>', { noremap = true, silent = true })
-
-vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Scroll down and center cursor' })
-vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Scroll up and center cursor' })
-vim.keymap.set('n', 'n', 'nzzzv', { desc = 'Next search result and center' })
-vim.keymap.set('n', 'N', 'Nzzzv', { desc = 'Previous search result and center' })
-
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -165,6 +155,22 @@ require('lazy').setup({
   },
   {
     'tpope/vim-fugitive',
+  },
+  {
+    'nvim-neotest/nvim-nio',
+  },
+  {
+    'mfussenegger/nvim-dap',
+    requires = {
+      'mfussenegger/nvim-dap',
+      'nvim-neotest/nvim-nio',
+    },
+    config = function()
+      require('dapui').setup()
+    end,
+  },
+  {
+    'rcarriga/nvim-dap-ui',
   },
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -399,6 +405,7 @@ require('lazy').setup({
       library = {
         -- Load luvit types when the `vim.uv` word is found
         { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+        'nvim-dap-ui',
       },
     },
   },
@@ -409,7 +416,15 @@ require('lazy').setup({
       -- Automatically install LSPs and related tools to stdpath for Neovim
       -- Mason must be loaded before its dependents so we need to set it up here.
       -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
-      { 'williamboman/mason.nvim', opts = {} },
+      {
+        'williamboman/mason.nvim',
+        opts = {
+          registries = {
+            'github:mason-org/mason-registry',
+            'github:crashdummyy/mason-registry',
+          },
+        },
+      },
       'williamboman/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
@@ -698,11 +713,14 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        python = { 'black' },
+        typescript = { 'prettierd' },
+        typescriptreact = { 'prettierd' },
+        javascript = { 'prettierd' },
+        javascriptreact = { 'prettierd' },
+        json = { 'prettierd' },
+        html = { 'prettierd' },
+        css = { 'prettierd' },
       },
     },
   },
@@ -960,6 +978,30 @@ require('lazy').setup({
     },
   },
 })
+
+vim.api.nvim_create_autocmd('CmdlineEnter', {
+  pattern = '*',
+  callback = function()
+    -- Only change directory if we're in command-line mode
+    vim.cmd 'silent! lcd %:p:h'
+  end,
+})
+
+-- My own keymaps
+vim.api.nvim_set_keymap('i', '<A-BS>', '<C-W>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('i', '<A-h>', '<S-left>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('i', '<A-l>', '<S-right>', { noremap = true, silent = true })
+
+vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Scroll down and center cursor' })
+vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Scroll up and center cursor' })
+vim.keymap.set('n', 'n', 'nzzzv', { desc = 'Next search result and center' })
+vim.keymap.set('n', 'N', 'Nzzzv', { desc = 'Previous search result and center' })
+vim.keymap.set('v', '<A-c>', '"+yy', { desc = 'Copy to system clipboard' })
+
+vim.o.tabstop = 4 -- A TAB character looks like 4 spaces
+vim.o.expandtab = true -- Pressing the TAB key will insert spaces instead of a TAB character
+vim.o.softtabstop = 4 -- Number of spaces inserted instead of a TAB character
+vim.o.shiftwidth = 4 -- Number of spaces inserted when indenting
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
