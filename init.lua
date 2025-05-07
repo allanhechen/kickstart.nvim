@@ -979,14 +979,6 @@ require('lazy').setup({
   },
 })
 
-vim.api.nvim_create_autocmd('CmdlineEnter', {
-  pattern = '*',
-  callback = function()
-    -- Only change directory if we're in command-line mode
-    vim.cmd 'silent! lcd %:p:h'
-  end,
-})
-
 -- My own keymaps
 vim.api.nvim_set_keymap('i', '<A-BS>', '<C-W>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('i', '<A-h>', '<S-left>', { noremap = true, silent = true })
